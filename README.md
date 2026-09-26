@@ -29,8 +29,9 @@ HTML5, CSS3, Bootstrap 5, JavaScript, Node.js, Express.js, MongoDB and Mongoose.
 
 Faculty members can log in to manage student profiles, maintain academic information and access student mentoring features.
 
-Username:faculty
-Password:Fp!9Kq
+Username : faculty
+
+Password : Fp!9Kq
 
 ### Student Login
 
@@ -38,8 +39,9 @@ Students can log in using their individual credentials to view their own profile
 
 Demo credentials should be configured according to the users available in the database. Do not publish actual passwords or database credentials in the repository.
 
-Username:24BCS101
-Password:St!7Px
+Username : 24BCS101
+
+Password : St!7Px
 
 ## API
 
