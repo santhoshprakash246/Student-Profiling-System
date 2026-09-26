@@ -22,40 +22,6 @@ HTML5, CSS3, Bootstrap 5, JavaScript, Node.js, Express.js, MongoDB and Mongoose.
 * **Responsive Interface:** Bootstrap-based interface designed for desktop and mobile screens.
 * **Role-Based Access:** Separate faculty and student access to restrict profile management and protect student information.
 
-## Install and Run
-
-1. Install Node.js and configure MongoDB locally or using MongoDB Atlas.
-2. Open the project folder in VS Code or the byteXL NIMBUS terminal.
-3. Install the required dependencies:
-
-```bash
-npm install
-```
-
-4. Create a `.env` file in the project root and configure the MongoDB connection and required environment variables.
-
-```env
-MONGODB_URI=your_mongodb_connection_string
-PORT=3000
-```
-
-5. Start the application:
-
-```bash
-npm start
-```
-
-For development, if the project has a development script:
-
-```bash
-npm run dev
-```
-
-6. Open the application at:
-
-```text
-http://localhost:3000
-```
 
 ## Authentication
 
