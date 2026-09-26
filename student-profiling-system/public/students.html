@@ -1,0 +1,1211 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Faculty - Student Management</title>
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+
+  <style>
+    body {
+      background: #f4f6fb;
+      font-family: Arial, sans-serif;
+    }
+
+    .main-container {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .card {
+      border: none;
+      border-radius: 12px;
+    }
+
+    .card-header {
+      background: #273DB4;
+      color: white;
+      border-radius: 12px 12px 0 0 !important;
+    }
+
+    .btn-primary {
+      background: #273DB4;
+      border-color: #273DB4;
+    }
+
+    .credentials-box {
+      border: 2px solid #198754;
+      border-radius: 12px;
+      background: #e9f8ef;
+    }
+
+    .credential-value {
+      font-weight: bold;
+      font-size: 18px;
+      color: #146c43;
+      overflow-wrap: anywhere;
+    }
+
+    .table th {
+      white-space: nowrap;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container-fluid py-4 main-container">
+
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold">Faculty Dashboard</h2>
+      <p class="text-muted mb-0">Student Profile Management</p>
+    </div>
+
+    <button class="btn btn-danger" onclick="logout()">
+      Logout
+    </button>
+  </div>
+
+  <!-- MESSAGE -->
+  <div id="message"></div>
+
+  <!-- GENERATED CREDENTIALS -->
+  <div
+    id="credentialsBox"
+    class="credentials-box p-4 mb-4 d-none"
+  >
+    <h4 class="text-success">
+      Student Created Successfully!
+    </h4>
+
+    <p class="text-muted">
+      Share these login credentials with the student.
+      The password is displayed only once.
+    </p>
+
+    <div class="mb-2">
+      <strong>Student Username:</strong>
+      <div id="generatedUsername" class="credential-value"></div>
+    </div>
+
+    <div class="mb-3">
+      <strong>Generated Password:</strong>
+      <div id="generatedPassword" class="credential-value"></div>
+    </div>
+
+    <button
+      class="btn btn-success"
+      type="button"
+      onclick="copyCredentials()"
+    >
+      Copy Credentials
+    </button>
+
+    <button
+      class="btn btn-secondary"
+      type="button"
+      onclick="hideCredentials()"
+    >
+      Close
+    </button>
+  </div>
+
+  <!-- STUDENT FORM -->
+  <div class="card shadow-sm mb-4">
+
+    <div class="card-header p-3">
+      <h5 id="formTitle" class="mb-0">
+        Add New Student
+      </h5>
+    </div>
+
+    <div class="card-body p-4">
+
+      <form id="studentForm">
+
+        <input type="hidden" id="studentId">
+
+        <h6 class="text-primary mb-3">
+          Personal Information
+        </h6>
+
+        <div class="row g-3">
+
+          <div class="col-md-6">
+            <label class="form-label">Student Name *</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              required
+            >
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Register Number *</label>
+            <input
+              type="text"
+              class="form-control"
+              id="registerNumber"
+              required
+            >
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Department *</label>
+            <input
+              type="text"
+              class="form-control"
+              id="department"
+              required
+            >
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Year *</label>
+            <select class="form-select" id="year" required>
+              <option value="">Select Year</option>
+              <option value="1">1st Year</option>
+              <option value="2">2nd Year</option>
+              <option value="3">3rd Year</option>
+              <option value="4">4th Year</option>
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Section *</label>
+            <select class="form-select" id="section" required>
+              <option value="">Select Section</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Student Category *</label>
+            <select
+              class="form-select"
+              id="studentCategory"
+              required
+            >
+              <option value="">Select Category</option>
+              <option value="Hosteller">Hosteller</option>
+              <option value="Day Scholar">Day Scholar</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Date of Birth</label>
+            <input
+              type="date"
+              class="form-control"
+              id="dateOfBirth"
+            >
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Gender</label>
+            <select class="form-select" id="gender">
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+            >
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Phone</label>
+            <input
+              type="tel"
+              class="form-control"
+              id="phone"
+            >
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Address</label>
+            <input
+              type="text"
+              class="form-control"
+              id="address"
+            >
+          </div>
+
+        </div>
+
+        <hr class="my-4">
+
+        <h6 class="text-primary mb-3">
+          Academic Information
+        </h6>
+
+        <div class="row g-3">
+
+          <div class="col-md-3">
+            <label class="form-label">CGPA</label>
+            <input
+              type="number"
+              class="form-control"
+              id="cgpa"
+              min="0"
+              max="10"
+              step="0.01"
+              value="0"
+            >
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Arrears</label>
+            <input
+              type="number"
+              class="form-control"
+              id="arrears"
+              min="0"
+              value="0"
+            >
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">10th Mark</label>
+            <input
+              type="number"
+              class="form-control"
+              id="tenthMark"
+              min="0"
+              max="500"
+              value="0"
+            >
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">12th Mark</label>
+            <input
+              type="number"
+              class="form-control"
+              id="twelfthMark"
+              min="0"
+              max="600"
+              value="0"
+            >
+          </div>
+
+        </div>
+
+        <hr class="my-4">
+
+        <h6 class="text-primary mb-3">
+          Skills and Career Information
+        </h6>
+
+        <div class="row g-3">
+
+          <div class="col-md-6">
+            <label class="form-label">
+              Skills (comma separated)
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="skills"
+              placeholder="Python, Java, HTML"
+            >
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">
+              Interests (comma separated)
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="interests"
+              placeholder="AI, Web Development"
+            >
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Primary Career Goal *</label>
+            <select
+              class="form-select"
+              id="careerGoal"
+              required
+            >
+              <option value="">Select Career Goal</option>
+              <option value="Placement">Placement</option>
+              <option value="Higher Studies">Higher Studies</option>
+              <option value="Entrepreneurship">Entrepreneurship</option>
+              <option value="Not Decided">Not Decided</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">
+              Career Goal Description
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="careerDescription"
+              placeholder="Career interests or goals"
+            >
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label">
+              Achievements (comma separated)
+            </label>
+            <textarea
+              class="form-control"
+              id="achievements"
+              rows="2"
+              placeholder="Awards, certificates, competitions"
+            ></textarea>
+          </div>
+
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="saveButton"
+          >
+            Add Student
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="resetForm()"
+          >
+            Clear Form
+          </button>
+
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- STUDENT TABLE -->
+  <div class="card shadow-sm">
+
+    <div class="card-header p-3">
+      <h5 class="mb-0">All Students</h5>
+    </div>
+
+    <div class="card-body">
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <input
+            type="text"
+            id="searchInput"
+            class="form-control"
+            placeholder="Search by name or register number..."
+            oninput="filterStudents()"
+          >
+        </div>
+      </div>
+
+      <div class="table-responsive">
+
+        <table class="table table-bordered table-hover align-middle">
+
+          <thead class="table-light">
+            <tr>
+              <th>Name</th>
+              <th>Register Number</th>
+              <th>Department</th>
+              <th>Year</th>
+              <th>Section</th>
+              <th>Category</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody id="studentTable">
+            <tr>
+              <td colspan="7" class="text-center">
+                Loading students...
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+"use strict";
+
+// ==========================================
+// AUTHENTICATION
+// ==========================================
+
+const token = localStorage.getItem("authToken");
+
+let currentUser = {};
+
+try {
+    currentUser = JSON.parse(
+        localStorage.getItem("authUser") || "{}"
+    );
+} catch (error) {
+    currentUser = {};
+}
+
+if (!token || currentUser.role !== "faculty") {
+    window.location.replace("/index.html");
+}
+// Store students for search and display
+let allStudents = [];
+
+
+// ==========================================
+// API HELPER
+// ==========================================
+
+async function api(url, options = {}) {
+  const response = await fetch(url, {
+    ...options,
+
+    headers: {
+      ...(options.headers || {}),
+
+      Authorization: `Bearer ${token}`,
+
+      ...(options.body
+        ? { "Content-Type": "application/json" }
+        : {})
+    }
+  });
+
+  let data;
+
+  try {
+    data = await response.json();
+  } catch (error) {
+    throw new Error("Invalid response from server");
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      data.message || "Something went wrong"
+    );
+  }
+
+  return data;
+}
+
+
+// ==========================================
+// MESSAGE DISPLAY
+// ==========================================
+
+function showMessage(message, type = "success") {
+  const messageBox = document.getElementById("message");
+
+  messageBox.innerHTML = "";
+
+  const alert = document.createElement("div");
+
+  alert.className = `alert alert-${type} alert-dismissible fade show`;
+
+  alert.setAttribute("role", "alert");
+
+  alert.textContent = message;
+
+  const closeButton = document.createElement("button");
+
+  closeButton.type = "button";
+  closeButton.className = "btn-close";
+  closeButton.setAttribute("data-bs-dismiss", "alert");
+
+  alert.appendChild(closeButton);
+
+  messageBox.appendChild(alert);
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+
+// ==========================================
+// SAFE HTML DISPLAY
+// ==========================================
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(
+    /[&<>"']/g,
+    character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    })[character]
+  );
+}
+
+
+// ==========================================
+// COLLECT FORM DATA
+// ==========================================
+
+function getFormData() {
+  return {
+    name: document.getElementById("name").value.trim(),
+
+    registerNumber:
+      document.getElementById("registerNumber").value.trim(),
+
+    department:
+      document.getElementById("department").value.trim(),
+
+    year: Number(
+      document.getElementById("year").value
+    ),
+
+    section:
+      document.getElementById("section").value,
+
+    studentCategory:
+      document.getElementById("studentCategory").value,
+
+    dateOfBirth:
+      document.getElementById("dateOfBirth").value || null,
+
+    gender:
+      document.getElementById("gender").value,
+
+    email:
+      document.getElementById("email").value.trim(),
+
+    phone:
+      document.getElementById("phone").value.trim(),
+
+    address:
+      document.getElementById("address").value.trim(),
+
+    academicDetails: {
+      cgpa: Number(
+        document.getElementById("cgpa").value || 0
+      ),
+
+      arrears: Number(
+        document.getElementById("arrears").value || 0
+      ),
+
+      tenthMark: Number(
+        document.getElementById("tenthMark").value || 0
+      ),
+
+      twelfthMark: Number(
+        document.getElementById("twelfthMark").value || 0
+      )
+    },
+
+    skills: document.getElementById("skills").value
+      .split(",")
+      .map(item => item.trim())
+      .filter(Boolean),
+
+    interests: document.getElementById("interests").value
+      .split(",")
+      .map(item => item.trim())
+      .filter(Boolean),
+
+    careerGoal: {
+      primary:
+        document.getElementById("careerGoal").value,
+
+      description:
+        document.getElementById("careerDescription").value.trim()
+    },
+
+    achievements:
+      document.getElementById("achievements").value
+        .split(",")
+        .map(item => item.trim())
+        .filter(Boolean)
+  };
+}
+
+
+// ==========================================
+// ADD / UPDATE STUDENT
+// ==========================================
+
+document
+  .getElementById("studentForm")
+  .addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const studentId =
+      document.getElementById("studentId").value;
+
+    const studentData = getFormData();
+
+    const saveButton =
+      document.getElementById("saveButton");
+
+    saveButton.disabled = true;
+
+    saveButton.textContent = studentId
+      ? "Updating..."
+      : "Adding...";
+
+    try {
+
+      if (studentId) {
+
+        // Update existing student
+        const result = await api(
+          `/api/students/${studentId}`,
+          {
+            method: "PUT",
+
+            body: JSON.stringify(studentData)
+          }
+        );
+
+        showMessage(
+          result.message || "Student updated successfully."
+        );
+
+        hideCredentials();
+
+      } else {
+
+        // Add new student
+        // Password is generated automatically by backend
+        const result = await api(
+          "/api/students",
+          {
+            method: "POST",
+
+            body: JSON.stringify(studentData)
+          }
+        );
+
+        if (result.credentials) {
+
+          displayCredentials(
+            result.credentials.username,
+            result.credentials.password
+          );
+
+        }
+
+        showMessage(
+          "Student added successfully. Login credentials generated."
+        );
+        if (result.success) {
+        const username = result.credentials.username;
+        const password = result.credentials.password;
+
+        alert(
+            "Student Added Successfully!\n\n" +
+            "Username: " + username + "\n" +
+            "Password: " + password + "\n\n" +
+            "Please share these credentials with the student."
+        );
+    }
+      }
+
+      resetForm();
+
+      await loadStudents();
+
+    } catch (error) {
+
+      showMessage(error.message, "danger");
+
+    } finally {
+
+      saveButton.disabled = false;
+
+      saveButton.textContent =
+        document.getElementById("studentId").value
+          ? "Update Student"
+          : "Add Student";
+    }
+  });
+
+
+// ==========================================
+// DISPLAY GENERATED CREDENTIALS
+// ==========================================
+
+function displayCredentials(username, password) {
+
+  document.getElementById("generatedUsername").textContent =
+    username;
+
+  document.getElementById("generatedPassword").textContent =
+    password;
+
+  document
+    .getElementById("credentialsBox")
+    .classList.remove("d-none");
+}
+
+
+// ==========================================
+// COPY GENERATED CREDENTIALS
+// ==========================================
+
+async function copyCredentials() {
+
+  const username =
+    document.getElementById("generatedUsername").textContent;
+
+  const password =
+    document.getElementById("generatedPassword").textContent;
+
+  const credentials =
+    `Username: ${username}\nPassword: ${password}`;
+
+  try {
+
+    await navigator.clipboard.writeText(credentials);
+
+    showMessage("Student credentials copied successfully.");
+
+  } catch (error) {
+
+    showMessage(
+      "Unable to copy automatically. Please copy the credentials manually.",
+      "warning"
+    );
+  }
+}
+
+
+// ==========================================
+// HIDE GENERATED CREDENTIALS
+// ==========================================
+
+function hideCredentials() {
+
+  document
+    .getElementById("credentialsBox")
+    .classList.add("d-none");
+
+  document.getElementById("generatedUsername").textContent = "";
+  document.getElementById("generatedPassword").textContent = "";
+}
+
+
+// ==========================================
+// LOAD ALL STUDENTS
+// ==========================================
+
+async function loadStudents() {
+
+  const tbody =
+    document.getElementById("studentTable");
+
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="7" class="text-center">
+        Loading students...
+      </td>
+    </tr>
+  `;
+
+  try {
+
+    const result = await api("/api/students");
+
+    allStudents = result.students || [];
+
+    renderStudents(allStudents);
+
+  } catch (error) {
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" class="text-center text-danger">
+          ${escapeHTML(error.message)}
+        </td>
+      </tr>
+    `;
+  }
+}
+
+
+// ==========================================
+// RENDER STUDENT TABLE
+// ==========================================
+
+function renderStudents(students) {
+
+  const tbody =
+    document.getElementById("studentTable");
+
+  tbody.innerHTML = "";
+
+  if (!students.length) {
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" class="text-center">
+          No students found.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  students.forEach(student => {
+
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${escapeHTML(student.name)}</td>
+
+      <td>${escapeHTML(student.registerNumber)}</td>
+
+      <td>${escapeHTML(student.department)}</td>
+
+      <td>${escapeHTML(student.year)}</td>
+
+      <td>${escapeHTML(student.section)}</td>
+
+      <td>${escapeHTML(student.studentCategory)}</td>
+
+      <td>
+        <div class="action-buttons">
+
+          <button
+            class="btn btn-sm btn-warning"
+            onclick="editStudent('${student._id}')"
+          >
+            Edit
+          </button>
+
+          <button
+            class="btn btn-sm btn-info"
+            onclick="resetStudentPassword('${student._id}')"
+          >
+            Reset Password
+          </button>
+
+          <button
+            class="btn btn-sm btn-danger"
+            onclick="deleteStudent('${student._id}')"
+          >
+            Delete
+          </button>
+
+        </div>
+      </td>
+    `;
+
+    tbody.appendChild(row);
+  });
+}
+
+
+// ==========================================
+// SEARCH STUDENTS
+// ==========================================
+
+function filterStudents() {
+
+  const searchTerm =
+    document.getElementById("searchInput")
+      .value.toLowerCase()
+      .trim();
+
+  const filteredStudents = allStudents.filter(student => {
+
+    const name =
+      String(student.name || "").toLowerCase();
+
+    const registerNumber =
+      String(student.registerNumber || "").toLowerCase();
+
+    return (
+      name.includes(searchTerm) ||
+      registerNumber.includes(searchTerm)
+    );
+  });
+
+  renderStudents(filteredStudents);
+}
+
+
+// ==========================================
+// EDIT STUDENT
+// ==========================================
+
+function editStudent(id) {
+
+  const student = allStudents.find(
+    item => item._id === id
+  );
+
+  if (!student) {
+    showMessage("Student not found.", "danger");
+    return;
+  }
+
+  document.getElementById("studentId").value =
+    student._id;
+
+  const fields = [
+    "name",
+    "registerNumber",
+    "department",
+    "year",
+    "section",
+    "studentCategory",
+    "email",
+    "phone",
+    "gender",
+    "address"
+  ];
+
+  fields.forEach(field => {
+
+    document.getElementById(field).value =
+      student[field] ?? "";
+
+  });
+
+  document.getElementById("dateOfBirth").value =
+    student.dateOfBirth
+      ? student.dateOfBirth.substring(0, 10)
+      : "";
+
+  document.getElementById("cgpa").value =
+    student.academicDetails?.cgpa ?? 0;
+
+  document.getElementById("arrears").value =
+    student.academicDetails?.arrears ?? 0;
+
+  document.getElementById("tenthMark").value =
+    student.academicDetails?.tenthMark ?? 0;
+
+  document.getElementById("twelfthMark").value =
+    student.academicDetails?.twelfthMark ?? 0;
+
+  document.getElementById("skills").value =
+    (student.skills || []).join(", ");
+
+  document.getElementById("interests").value =
+    (student.interests || []).join(", ");
+
+  document.getElementById("careerGoal").value =
+    student.careerGoal?.primary ?? "";
+
+  document.getElementById("careerDescription").value =
+    student.careerGoal?.description ?? "";
+
+  document.getElementById("achievements").value =
+    (student.achievements || []).join(", ");
+
+  document.getElementById("formTitle").textContent =
+    "Update Student";
+
+  document.getElementById("saveButton").textContent =
+    "Update Student";
+
+  document.getElementById("registerNumber").readOnly = false;
+
+  hideCredentials();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+
+// ==========================================
+// RESET STUDENT PASSWORD
+// ==========================================
+
+async function resetStudentPassword(id) {
+
+  const student = allStudents.find(
+    item => item._id === id
+  );
+
+  if (!student) {
+    showMessage("Student not found.", "danger");
+    return;
+  }
+
+  const confirmed = confirm(
+    `Generate a new password for ${student.name} (${student.registerNumber})?`
+  );
+
+  if (!confirmed) return;
+
+  try {
+
+    const result = await api(
+      `/api/students/${id}/password`,
+      {
+        method: "PUT"
+      }
+    );
+
+    if (result.credentials) {
+
+      displayCredentials(
+        result.credentials.username,
+        result.credentials.password
+      );
+
+      showMessage(
+        "Password reset successfully. Share the new credentials with the student."
+      );
+
+    } else {
+
+      showMessage(
+        "Password reset, but credentials were not returned.",
+        "warning"
+      );
+    }
+
+  } catch (error) {
+
+    showMessage(error.message, "danger");
+
+  }
+}
+
+
+// ==========================================
+// DELETE STUDENT
+// ==========================================
+
+async function deleteStudent(id) {
+
+  const student = allStudents.find(
+    item => item._id === id
+  );
+
+  if (!student) {
+    showMessage("Student not found.", "danger");
+    return;
+  }
+
+  const confirmed = confirm(
+    `Are you sure you want to delete ${student.name} (${student.registerNumber}) and their login account?`
+  );
+
+  if (!confirmed) return;
+
+  try {
+
+    const result = await api(
+      `/api/students/${id}`,
+      {
+        method: "DELETE"
+      }
+    );
+
+    showMessage(
+      result.message || "Student deleted successfully."
+    );
+
+    await loadStudents();
+
+  } catch (error) {
+
+    showMessage(error.message, "danger");
+
+  }
+}
+
+
+// ==========================================
+// RESET FORM
+// ==========================================
+
+function resetForm() {
+
+  document.getElementById("studentForm").reset();
+
+  document.getElementById("studentId").value = "";
+
+  document.getElementById("formTitle").textContent =
+    "Add New Student";
+
+  document.getElementById("saveButton").textContent =
+    "Add Student";
+
+  document.getElementById("registerNumber").readOnly = false;
+
+  hideCredentials();
+}
+
+
+// ==========================================
+// LOGOUT
+// ==========================================
+
+function logout() {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("authUser");
+
+    window.location.replace("/index.html");
+}
+
+
+// ==========================================
+// INITIALIZE DASHBOARD
+// ==========================================
+
+loadStudents();
+
+</script>
+
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+</body>
+</html>
